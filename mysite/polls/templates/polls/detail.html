@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>details</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/styled.css' %}" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<body>
+
+    <!-- Header -->
+        <header id="header">
+            <div class="logo">{{ question.question_text }}</div>
+        </header>
+    <!-- Main -->
+			<section id="main">
+				<div class="inner">
+
+				<!-- One -->
+					<section id="one" class="wrapper style1">
+
+						<header class="special">
+							<h2>Choose an option</h2>
+							<!--<p>vehicula urna sed justo bibendum</p>-->
+						</header>
+						<div class="content">
+                            {% if error_message %}<p><strong>{{error_message}}</strong></p> {% endif %}
+                            <form action="{% url 'polls:vote' question.id %}" method="post">
+                                {% csrf_token %}
+                                {% for choice in question.choice_set.all %}
+                                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{choice.id}}" />
+                                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
+                                {% endfor %}
+                                <input type="submit" value="Vote" />
+                            </form>
+						</div>
+					</section>
+				</div>
+			</section>
+    <!-- Footer -->
+			<footer id="footer">
+				<div class="copyright">
+					The Django Framework.
+				</div>
+			</footer>
+</body>
+</html>

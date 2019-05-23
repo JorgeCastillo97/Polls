@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Just a Polls App</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/styled.css' %}" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+</head>
+<body>
+{% if latest_question_list %}
+	{% if saved_success %}
+        <script>alert('Poll saved successfully!')</script>
+    {% endif %}
+<!-- Header -->
+        <header id="header">
+            <div class="logo">A Polls App<span>made with Django</span></div>
+        </header>
+<!-- Main -->
+		<section id="main">
+				<div class="inner">
+
+				<!-- One -->
+					<section id="one" class="wrapper style1">
+
+						<header class="special">
+							<h2>Polls available</h2>
+							<!--<p>vehicula urna sed justo bibendum</p>-->
+						</header>
+						<div class="content">
+                            <ul>
+                                {% for question in latest_question_list %}
+                                <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+                                {% endfor %}
+                            </ul>
+							<a href="{% url 'polls:newPoll' %}" class="button special">Create a new Poll!</a>
+						</div>
+					</section>
+                </div>
+        </section>
+<!-- Footer -->
+			<footer id="footer">
+				<div class="copyright">
+					The Django Framework.
+				</div>
+			</footer>
+
+
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create a new Poll</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/styled.css' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+</head>
+<body>
+    <!-- Header -->
+        <header id="header">
+            <div class="logo">Create a New Poll</div>
+        </header>
+<!-- Main -->
+		<section id="main">
+				<div class="inner">
+    {% if poll_form %}
+				<!-- One -->
+					<section id="one" class="wrapper style1">
+
+						<header class="special">
+							<h2>It could be about anything!</h2>
+						</header>
+						<div class="content">
+                            <form action="{% url 'polls:index' %}" method="post">
+                                {% csrf_token %}
+                                {{ poll_form.as_p }}
+                                <input type="submit" value="Save">
+                            </form>
+                            <button id="adder">Add another choice</button>
+						</div>
+					</section>
+                </div>
+        </section>
+<!-- Footer -->
+			<footer id="footer">
+				<div class="copyright">
+					The Django Framework.
+				</div>
+			</footer>
+    {% else %}
+    <p>There was a problem rendering the page!</p>
+    {% endif %}
+    <script src="{% static 'polls/js/add_choice.js' %}" ></script>
+</body>
+</html>

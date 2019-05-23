@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Results of your vote</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/styled.css' %}" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<body>
+    <!-- Header -->
+        <header id="header">
+            <div class="logo">Statistics</div>
+        </header>
+<!-- Main -->
+			<section id="main">
+				<div class="inner">
+
+				<!-- One -->
+					<section id="one" class="wrapper style1">
+
+						<header class="special">
+							<h2>Results for {{ question.question_text }}</h2>
+							<!--<p>vehicula urna sed justo bibendum</p>-->
+						</header>
+						<div class="content">
+                            <ul>
+                                {% for choice in question.choice_set.all %}
+                                    <li>the choice {{choice.choice_text}} has {{choice.votes}} vote{{choice.votes|pluralize}}</li>
+                                {% endfor %}
+                            </ul>
+                            <a href="{% url 'polls:detail' question.id%}">Vote again?</a>
+                            <a href="{% url 'polls:index' %}" class="button alt">Vote in other poll</a>
+						</div>
+					</section>
+				</div>
+			</section>
+<!-- Footer -->
+			<footer id="footer">
+				<div class="copyright">
+					The Django Framework.
+				</div>
+			</footer>
+</body>
+</html>
