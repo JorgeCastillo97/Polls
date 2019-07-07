@@ -25,7 +25,7 @@
 							<h2>It could be about anything!</h2>
 						</header>
 						<div class="content">
-                            <form action="{% url 'polls:index' %}" method="post">
+                            <form action="{% url 'polls:savePoll' %}" method="post">
                                 {% csrf_token %}
                                 {{ poll_form.as_p }}
                                 <input type="submit" value="Save">

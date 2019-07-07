@@ -1,7 +1,7 @@
 function addChoice(classSelector) {
     var choices = document.getElementsByClassName(classSelector);
     var numberOfChoices = choices.length;
-    var choicelabelText = "Choice "
+    var choicelabelText = "Choice ";
     choicelabelText += numberOfChoices + 1;
     var choicelabel = document.createTextNode(choicelabelText);
     var lastChoice = choices[numberOfChoices-1];

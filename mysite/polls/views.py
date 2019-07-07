@@ -1,7 +1,6 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.template import loader
 from django.views import generic
 from django.utils import timezone
 
@@ -41,53 +40,11 @@ from .forms import NewPollForm
     http_method_names = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'trace']"""
 
 def index(request):
-    if request.method == 'GET':
-       print('GET REQUEST')
-       latest_question_list = Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:100]
-       context = {
-           'latest_question_list': latest_question_list,
-       }
-       return render(request, 'polls/index.html', context)
-    elif request.method == 'POST':
-       print('POST REQUEST')
-       poll_form = NewPollForm(request.POST)
-       if poll_form.is_valid():
-           question_text = poll_form.cleaned_data['question_input']
-           choice_1 = poll_form.cleaned_data['choice_1']
-           choice_2 = poll_form.cleaned_data['choice_2']
-           #choice_3 = poll_form.cleaned_data['choice_3']
-           print("""DATA RECEIVED:
-                    question: %s
-                    choice 1: %s
-                    choice 2: %s
-                    choice 3: """ %(question_text, choice_1, choice_2))
-
-           # Insert vslues received from the form into the database
-           question = Question(question_text= question_text, pub_date= timezone.now())
-           question.save()
-
-           foreign_key = question.id
-           print('question id:', foreign_key)
-           choices = [choice_1, choice_2]
-           for choice in choices:
-               if choice == '':
-                   continue
-               else:
-                   c = Choice(choice_text= choice, question_id=foreign_key)
-                   c.question_id = foreign_key
-                   c.save()
-
-
-
-           latest_question_list = Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:100]
-           context = {
-               'latest_question_list': latest_question_list,
-               'saved_success': True
-           }
-           #return render(request, 'polls/index.html', context)
-           return render(request, 'polls/index.html', context)
-    else:
-       print('UNKNOWN')
+   latest_question_list = Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:100]
+   context = {
+       'latest_question_list': latest_question_list,
+   }
+   return render(request, 'polls/index.html', context)
 
 
 def get_queryset(self):
@@ -133,16 +90,37 @@ def PollFormTemplate(request):
 
 def SavePoll(request):
     if request.method == 'POST':
-        poll_form = NewPollForm(request.POST)
-        if poll_form.is_valid():
-            question_text = poll_form.cleaned_data['question_input']
-            print('The question received is: ' + question_text)
-            print('The choices: ')
-            choice_1 = poll_form.cleaned_data['choice_1']
-            choice_2 = poll_form.cleaned_data['choice_2']
+        j = 1
+        choices = []
+        while 1:
+            try:
+                name = 'choice_' + str(j)
+                j += 1
+                choices.append(request.POST[name])
+            except(KeyError):
+                print('Input name not found!')
+                break
 
-            print(choice_1 + '\n' + choice_2)
-            latest_question_list = Question.objects.order_by('-pub_date')[:100]
+        print(request.POST['question_input'])
+        print('Choices added dynamically:')
+        for choice in choices:
+            print(choice)
+
+        print('Saving info...')
+        question = Question(question_text=request.POST['question_input'], pub_date=timezone.now())
+        question.save()
+
+        fk = question.id
+        for choice in choices:
+            if choice == '':
+                continue
+            else:
+                c = Choice(choice_text=choice, question_id=fk)
+                c.save()
+
+        print('Poll saved successfully')
+        return redirect('/')
+
 
 
 
