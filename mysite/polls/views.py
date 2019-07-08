@@ -95,9 +95,9 @@ def SavePoll(request):
         while 1:
             try:
                 name = 'choice_' + str(j)
-                j += 1
                 choices.append(request.POST[name])
-            except(KeyError):
+                j += 1
+            except KeyError:
                 print('Input name not found!')
                 break
 
